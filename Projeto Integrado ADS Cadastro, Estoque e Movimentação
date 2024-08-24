@@ -1,0 +1,86 @@
+//Arquivo base para a criação do projeto integrado semestral do curso de ADS. Nele são inseridos os códigos para a criação de cadastros,  movimentação e controle de estoque.
+<?php 
+    class Produto{
+        private $nome;
+        private $codigo;
+        private $categoria;
+        private $estoque;
+        private $transacoes = [];
+
+
+        public function __construct($nom, $cod, $cat, $est){
+            $this->nome = $nom;
+            $this->codigo = $cod;
+            $this->categoria = $cat;
+            $this->estoque = $est;
+        }
+
+        public function status(){
+                echo                 
+                "<hr>Código: " . $this->getCodigo() .
+                "<br>Nome: " . $this->getNome() .
+                "<br>Categoria: " . $this->getCategoria() .
+                "<br>Estoque: " . $this->getEstoque();
+        }
+        public function vender($quantidade = 1){
+                if($this->getEstoque() >= $quantidade){
+                $this->setEstoque($this->getEstoque() - $quantidade);
+                $this->registrarTransacao('venda', $quantidade);
+                }else{
+                        echo "Estoque Insuficiente!";
+                }
+        }
+        public function comprar($quantidade = 1){
+                $this->setEstoque($this->getEstoque() + $quantidade);
+                $this->registrarTransacao('compra', $quantidade);
+        }
+        public function registrarTransacao($tipo, $quantidade){
+                $this->transacoes[] = [
+                        'tipo' => $tipo,
+                        'quantidade' => $quantidade,
+                        'data' => date('d-m-Y H:i:s')                        
+                ];
+        }
+        public function relatorio(){
+                echo "<h1>Relatório de Transações</h1>";
+                foreach($this->transacoes as $movimentacao){
+                        echo 
+                        "<hr>Tipo: " . ucfirst($movimentacao['tipo']) .
+                        "<br>Quantidade: " . $movimentacao['quantidade'] .
+                        "<br>Data: " . $movimentacao['data'] ."<br>";
+                }
+        }
+
+        public function getNome(){
+                return $this->nome;
+        }
+        public function setNome($nome){
+                $this->nome = $nome;
+                return $this;
+        }
+       
+        public function getCodigo(){
+                return $this->codigo;
+        } 
+        public function setCodigo($codigo){
+                $this->codigo = $codigo;
+                return $this;
+        }
+
+        public function getEstoque(){
+                return $this->estoque;
+        }
+        public function setEstoque($estoque){
+                $this->estoque = $estoque;
+                return $this;
+        }
+
+        public function getCategoria(){
+                return $this->categoria;
+        }
+        public function setCategoria($categoria){
+                $this->categoria = $categoria;
+                return $this;
+        }
+    }
+?>
